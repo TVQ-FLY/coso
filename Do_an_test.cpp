@@ -10,19 +10,165 @@
 
 using namespace std;
 
+void dangnhap();
+void dangky();
+void quenmk();
+
+
+// Dang nhap, dang ky, quen mat khau
+void dangky()
+{
+   int t = 0;
+   string usr, pas, u, p;
+   system("cls");
+   cout << "Nhap Username:";
+   cin >> usr;
+   ofstream write("username.txt", ios::app); // username file created which of append type
+   ifstream read("username.txt");
+   while (read >> u >> p)
+   {
+      if (u == usr)
+      {
+         t = 1;
+         break;
+      }
+   }
+   if (t == 1)
+   {
+      cout << "Username da duoc dang ky =((" << endl;
+   }
+   else
+   {
+      cout << "Nhap password:";
+      cin >> pas;
+      write << usr << " " << pas << endl;
+      cout << "Dang ky thanh cong" << endl;
+   }
+   write.close();
+}
+void dangnhap()
+{
+   int t = 0;
+   string usr, pas, u, p;
+   cout << "\n\n\n===== DO AN CO SO =====\n\n";
+   cout << "*** LOGIN ***\n";
+   cout << "Nhap Username: ";
+   cin >> usr;
+   cout << "Nhap Password: ";
+   cin >> pas;
+   ifstream read("username.txt");
+   while (read >> u >> p)
+   {
+      if (u == usr && p == pas)
+      {
+         t = 1;
+         break;
+      }
+   }
+   read.close();
+   if (t == 1)
+   {
+      cout << "Dang nhap thanh cong !!!" << endl;
+   }
+   else
+   {
+      cout << " " << endl;
+   }
+}
+
+void quenmk()
+{
+   int ch;
+   system("cls");
+   cout << "1.Tim tai khoan bang Username\n2.Tim tai khoan bang Password\n3.Quay lai Menu\n4.Nhap lua chon cua ban:";
+   cin >> ch;
+   switch (ch)
+   {
+      case 1:
+      {
+         int t = 0;
+         string su, u, p;
+         cout << "Nhap Username cua ban:";
+         cin >> su;
+         ifstream read("username.txt");
+         while (read >> u >> p)
+         {
+            if (su == u)
+            {
+               t = 1;
+               break;
+            }
+         }
+         read.close();
+         if (t == 1)
+         {
+            cout << "Thanh cong ! Da tim thay tai khoan \nPassword la: " << p << endl;
+         }
+         else
+         {
+            cout << "Khong tim thay tai khoan =((" << endl;
+         }
+         break;
+      }
+      case 2:
+      {
+         int t = 0;
+         string sp, u, p;
+         cout << "Nhap vao Password cua ban:";
+         cin >> sp;
+         ifstream read("username.txt");
+         while (read >> u >> p)
+         {
+            if (sp == p)
+            {
+               t = 1;
+               break;
+            }
+         }
+         read.close();
+         if (t == 1)
+         {
+            cout << "Thanh cong ! Da tim thay tai khoan \nUsername la: " << u << endl;
+         }
+         else
+         {
+            cout << "Khong tim thay tai khoan =((" << endl;
+         }
+         break;
+      }
+      case 3:
+      {
+         cout << endl;
+
+         break;
+      }
+      default:
+      {
+         cout << "Lua chon sai, nham Enter de thu lai =((" << endl;
+         quenmk();
+      }
+   }
+}
+
+//===================
+
 void menu()
 {
 
    cout << "\n\n\n===== CHUONG TRINH QUAN LY THU VIEN =====\n";
    cout << "\t**** TRAN VAN QUYEN ****";
    cout << "\n\n Nhap lua chon cua ban: \n";
-   cout << " 1. Dang ki ban doc \n";
-   cout << " 2. Nhap sach \n";
-   cout << " 3. Sua thong tin sach \n";
-   cout << " 4. Xoa sach \n";
-   cout << " 5. In danh sach ban doc\n";
-   cout << " 6. In danh sach sach\n";
-   cout << " 7. Thoat khoi chuong trinh !!!\n";
+   cout << " 0. Lay lai mat khau Admin\n";
+   cout << " 1. Dang ky tai khoan Admin\n";
+   cout << " 2. Them danh ban doc \n";
+   cout << " 3. Nhap sach \n";
+   cout << " 4. Sua thong tin sach \n";
+   cout << " 5. Xoa sach \n";
+   cout << " 6. In danh sach ban doc\n";
+   cout << " 7. In danh sach sach\n";
+   cout << " 8. In danh sach tai khoan Admin\n";
+   cout << " 9. Thoat khoi chuong trinh !!!\n";
+
    cout << "Moi nhap: ";
 }
 
@@ -65,8 +211,6 @@ public:
    static void inds();
 };
 
-
-
 int bandoc::sobandoc = 0;
 
 bandoc *bandoc::cacbandoc[100];
@@ -91,7 +235,6 @@ void bandoc::dangki()
         << " da duoc dang ki \n ";
    outfile.close();
 }
-
 
 void bandoc::inds()
 {
@@ -124,9 +267,9 @@ void bandoc::inds()
 class book
 {
 
-   int book_no;
+   int idsach;
    char name[30];
-   char nxb[50];
+   char tacgia[50];
 
 public:
    void main_menu();
@@ -137,86 +280,42 @@ public:
    int check(int);
    void modify(int);
    void delete_rec(int);
+   static void listAdmin();
 };
-
 
 void book::add()
 {
 
    system("cls");
    int r, flag;
-   ofstream fout("Record.txt", ios::app);
+   ofstream fout("Data.txt", ios::app);
 
    cout << "\n\n\n=====   CHUC NANG THEM SACH  =====\n";
    cout << "\nMoi ban nhap: ";
-
-   cout << "\n ID sach : " << endl;
+   cout << "\n ID sach : ";
    cin >> r;
-
    flag = check(r);
-
    if (flag)
-      cout << "\n XIN LOI ! ID NAY DA DUOC THEM =((";
+      cout << "\n XIN LOI ! SACH NAY DA DUOC THEM =((";
 
    else
    {
 
       cin.sync();
-      book_no = r;
+      idsach = r;
       cout << " Ten sach: ";
       cin >> name;
-      cout << " Tac gia: ";
-      cin >> nxb;
+      cout << " Ten tac gia: ";
+      cin >> tacgia;
 
       fout.write((char *)this, sizeof(book));
       cout << "\n SACH DA DUOC THEM VAO HE THONG !!!";
    }
 
-   cout << "\n Press any key to continue.....!!";
+   cout << "\n Nhan ENTER de tiep tuc !";
 
    getch();
    fout.close();
-}
-
-void book::display()
-{
-
-   system("cls");
-
-   ifstream fin("data.txt", ios::in);
-   int r, flag;
-
-   cout << "\n Nhap ID sach : " << endl;
-   cin >> r;
-
-   while (true)
-   {
-
-      fin.read((char *)this, sizeof(book));
-      if (fin.eof() || fin.fail())
-      {
-         break;
-      }
-      if (book_no == r)
-      {
-
-         system("cls");
-         cout << "\n Thong tin sach:";
-         cout << "\n ----------------";
-         cout << "\n\n ID sach: " << book_no;
-         cout << "\n Ten sach: " << name;
-         cout << "\n NXB: " << nxb;
-         flag = 1;
-         break;
-      }
-   }
-
-   if (flag == 0)
-      cout << "\n Rat tiec, sach nay khong nam trong he thong =((";
-   cout << "\n\n Press any key to continue....!!";
-
-   getch();
-   fin.close();
 }
 
 void book::showbook()
@@ -224,10 +323,9 @@ void book::showbook()
 
    system("cls");
 
-   ifstream fin("Record.txt", ios::in);
-   cout << "\n\t\t\t    LIST BOOK!!!!";
-   cout << "\n\t\t\t    ----------------------";
-   cout << "\n\n ID Sach\tTen sach\tNXB\n";
+   ifstream fin("Data.txt", ios::in);
+   cout << "\n\n\n===== TAT CA SACH TRONG HE THONG =====\n";
+   cout << "\n\n ID \t\tTen sach\tTen tac gia\n";
 
    while (true)
    {
@@ -237,22 +335,21 @@ void book::showbook()
       {
          break;
       }
-      cout << "\n\n " << book_no << "\t\t" << name;
-      cout << "\t\t" << nxb;
+      cout << "\n\n " << idsach << "\t\t" << name;
+      cout << "\t\t" << tacgia;
    }
 
-   cout << "\n\n\n\t\t\tPress any key to continue.....!!";
+   cout << "\n\n\n\t\t\tNhan ENTER de tiep tuc !";
    getch();
    fin.close();
 }
-
 
 int book::check(int r)
 {
 
    int flag = 0;
 
-   ifstream fin("Record.txt", ios::in);
+   ifstream fin("Data.txt", ios::in);
 
    while (true)
    {
@@ -262,7 +359,7 @@ int book::check(int r)
       {
          break;
       }
-      if (book_no == r)
+      if (idsach == r)
       {
 
          flag = 1;
@@ -279,7 +376,7 @@ void book::modify(int r)
 
    long pos, flag = 0;
 
-   fstream file("Record.txt", ios::in | ios::out | ios::binary);
+   fstream file("Data.txt", ios::in | ios::out | ios::binary);
 
    while (true)
    {
@@ -291,26 +388,24 @@ void book::modify(int r)
          break;
       }
 
-      if (book_no == r)
+      if (idsach == r)
       {
 
-         cout << "\n Nhap Thong Tin Moi";
-         cout << "\n -----------------";
+         cout << "\n Nhap thong tin ban muon update: ";
          cout << "\n Ten sach: ";
          cin >> name;
-
-         cout << " NXB: ";
-         cin >> nxb;
+         cout << "Tac gia: ";
+         cin >> tacgia;
          file.seekg(pos);
          file.write((char *)this, sizeof(book));
-         cout << "\n Thong Tin Da Duoc Sua Doi....!!";
+         cout << "\n UPDATE THANH CONG !!!";
          flag = 1;
          break;
       }
    }
 
    if (flag == 0)
-      cout << "\n Khong ton tai ID !!";
+      cout << "\nXIN LOI, ID NAY KHONG TON TAI !!!";
    file.close();
 }
 
@@ -319,7 +414,7 @@ void book::delete_rec(int r)
 
    int flag = 0;
    char ch;
-   ifstream fin("data.txt", ios::in);
+   ifstream fin("Data.txt", ios::in);
    ofstream fout("temp.txt", ios::out);
 
    while (true)
@@ -331,12 +426,11 @@ void book::delete_rec(int r)
          break;
       }
 
-      if (book_no == r)
-
+      if (idsach == r)
       {
 
          cout << "\n Ten sach: " << name;
-         cout << "\n NXB: " << nxb;
+         cout << "\n NXB: " << tacgia;
          cout << "\n\n Ban Co Muon Xoa Thong Tin Khong?(y/n): ";
          cin >> ch;
 
@@ -344,9 +438,10 @@ void book::delete_rec(int r)
             fout.write((char *)this, sizeof(book));
          flag = 1;
       }
-
       else
+      {
          fout.write((char *)this, sizeof(book));
+      }
    }
 
    fin.close();
@@ -358,15 +453,44 @@ void book::delete_rec(int r)
    else
    {
 
-      remove("data.txt");
-      rename("temp.txt", "data.txt");
+      remove("Data.txt");
+      rename("temp.txt", "Data.txt");
+      cout << "Xoa thanh cong !!!";
    }
 }
+
+void listAdmin(){
+   system("cls");
+
+   
+      ifstream infile;
+      infile.open("username.txt");
+      cout << "\n";
+      string a;
+      getline(infile, a, ',');
+      string b;
+      getline(infile, b, ',');
+      cout << "\nDanh sach tai khoan Admin: \n";
+      cout << a << "\t"<< b;
+
+      for (int i = 0; i <= 5; i++)
+      {
+         string a;
+         getline(infile, a, ',');
+         string b;
+         getline(infile, b, ',');
+
+         cout << a << "\t" << b;
+      }
+
+      infile.close();
+}
+
 
 
 int main()
 {
-
+   dangnhap();
    book quyen;
    while (1)
    {
@@ -374,47 +498,62 @@ int main()
       int i = _getch();
       switch (i)
       {
-      case '1':
-      {
-         bandoc::dangki();
-         break;
+         case '0':
+         {
+            quenmk();
+            break;
+         }
+         case '1':
+         {
+            dangky();
+            break;
+         }
+         case '2':
+         {
+            bandoc::dangki();
+            break;
+         }
+         case '3':
+         {
+            quyen.add();
+            break;
+         }
+         case '4':
+         {
+            system("cls");
+            int r;
+            cout << "\n Nhap ID sach: ";
+            cin >> r;
+            quyen.modify(r);
+            break;
+         }
+         case '5':
+         {
+            system("cls");
+            int r;
+            cout << "\n Nhap ID sach: ";
+            cin >> r;
+            quyen.delete_rec(r);
+            break;
+         }
+         case '6':
+         {
+            bandoc::inds();
+            break;
+         }
+         case '7':
+         {
+            quyen.showbook();
+         }
+         case '8':
+         {
+            listAdmin();
+            break;
+         }
       }
-      case '2':
-      {
-         quyen.add();
+      if (i == '9')
          break;
-      }
-      case '3':
-      {
-         system("cls");
-         int r;
-         cout << "\n Nhap ID sach: ";
-         cin >> r;
-         quyen.modify(r);
-         break;
-      }
-      case '4':
-      {
-         system("cls");
-         int r;
-         cout << "\n Nhap ID sach: ";
-         cin >> r;
-         quyen.delete_rec(r);
-         break;
-      }
-      case '5':
-      {
-         bandoc::inds();
-
-         break;
-      }
-      case '6':
-         quyen.showbook();
-      }
-
-      if (i == '7')
-         break;
-         _getch(); 
+      _getch();
    }
    return 0;
 }
