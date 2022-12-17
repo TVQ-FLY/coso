@@ -14,7 +14,7 @@ void menu()
 {
 
    cout << "\n\n\n===== CHUONG TRINH QUAN LY THU VIEN =====\n";
-   cout << "**** TRAN VAN QUYEN ****";
+   cout << "\t**** TRAN VAN QUYEN ****";
    cout << "\n\n Nhap lua chon cua ban: \n";
    cout << " 1. Dang ki ban doc \n";
    cout << " 2. Nhap sach \n";
@@ -74,7 +74,6 @@ bandoc *bandoc::cacbandoc[100];
 void bandoc::dangki()
 {
    char ma[80];
-
    ofstream outfile;
    outfile.open("bandoc.txt", ios::app);
    cout << "\nMa ban doc : ";
@@ -138,7 +137,6 @@ public:
    int check(int);
    void modify(int);
    void delete_rec(int);
-   void bill(int);
 };
 
 
@@ -149,29 +147,29 @@ void book::add()
    int r, flag;
    ofstream fout("Record.txt", ios::app);
 
-   cout << "\n\t\t\t\t  Nhap Thong Tin Sach";
-   cout << "\n\t\t\t\t      * Menu Them Sach *";
-   cout << "\n ----------------------";
+   cout << "\n\n\n=====   CHUC NANG THEM SACH  =====\n";
+   cout << "\nMoi ban nhap: ";
 
-   cout << "\n Nhap ID sach :- " << endl;
+   cout << "\n ID sach : " << endl;
    cin >> r;
 
    flag = check(r);
 
    if (flag)
-      cout << "\n Trung roi";
+      cout << "\n XIN LOI ! ID NAY DA DUOC THEM =((";
 
    else
    {
 
+      cin.sync();
       book_no = r;
       cout << " Ten sach: ";
       cin >> name;
-      cout << " NhaXB: ";
+      cout << " Tac gia: ";
       cin >> nxb;
 
       fout.write((char *)this, sizeof(book));
-      cout << "\n Da them sach...!!!";
+      cout << "\n SACH DA DUOC THEM VAO HE THONG !!!";
    }
 
    cout << "\n Press any key to continue.....!!";
@@ -185,10 +183,10 @@ void book::display()
 
    system("cls");
 
-   ifstream fin("Record.txt", ios::in);
+   ifstream fin("data.txt", ios::in);
    int r, flag;
 
-   cout << "\n Nhap ID sach :- " << endl;
+   cout << "\n Nhap ID sach : " << endl;
    cin >> r;
 
    while (true)
@@ -214,7 +212,7 @@ void book::display()
    }
 
    if (flag == 0)
-      cout << "\n ID sach khong ton tai....!!";
+      cout << "\n Rat tiec, sach nay khong nam trong he thong =((";
    cout << "\n\n Press any key to continue....!!";
 
    getch();
@@ -248,44 +246,6 @@ void book::showbook()
    fin.close();
 }
 
-// void book::edit()
-// {
-
-//    system("cls");
-
-//    int choice, r;
-//    cout << "\n Menu Doi, Tra Phong";
-//    cout << "\n ---------";
-//    cout << "\n\n 1.Edit";
-//    cout << "\n 2.Delete";
-//    cout << "\n Nhap Hanh Dong Cua Ban: ";
-
-//    cin >> choice;
-//    system("cls");
-
-//    cout << "\n Nhap ID sach: ";
-//    cin >> r;
-
-//    switch (choice)
-//    {
-
-//    case 1:
-//       modify(r);
-//       break;
-
-//    case 2:
-//       delete_rec(r);
-//       break;
-
-//       break;
-
-//    default:
-//       cout << "\n Wrong Choice.....!!";
-//    }
-//    cout << "\n Press any key to continue....!!!";
-
-//    getch();
-// }
 
 int book::check(int r)
 {
@@ -407,7 +367,7 @@ void book::delete_rec(int r)
 int main()
 {
 
-   book h;
+   book quyen;
    while (1)
    {
       menu();
@@ -421,7 +381,7 @@ int main()
       }
       case '2':
       {
-         h.add();
+         quyen.add();
          break;
       }
       case '3':
@@ -430,7 +390,7 @@ int main()
          int r;
          cout << "\n Nhap ID sach: ";
          cin >> r;
-         h.modify(r);
+         quyen.modify(r);
          break;
       }
       case '4':
@@ -439,7 +399,7 @@ int main()
          int r;
          cout << "\n Nhap ID sach: ";
          cin >> r;
-         h.delete_rec(r);
+         quyen.delete_rec(r);
          break;
       }
       case '5':
@@ -449,7 +409,7 @@ int main()
          break;
       }
       case '6':
-         h.showbook();
+         quyen.showbook();
       }
 
       if (i == '7')
