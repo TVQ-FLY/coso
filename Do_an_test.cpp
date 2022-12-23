@@ -544,6 +544,7 @@ int main()
          case '7':
          {
             quyen.showbook();
+            break;
          }
          case '8':
          {
